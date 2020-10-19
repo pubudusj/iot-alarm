@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  iot-alarm
+
+  Sample SAM Template for iot-alarm
+
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+  BuzzerPin:
+    Type: Number
+  LedPin:
+    Type: Number
+
+Resources:
+  PublishToIotCloud:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/publish_to_iot_cloud/
+      Handler: lambda/app.lambda_handler
+      Runtime: python3.7
+      Policies:
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action: iot:Publish
+              Resource: !Sub "arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/alarm"
+      Events:
+        HelloWorld:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern:
+              source:
+                - aws.ec2
+              detail-type:
+                - EC2 Instance State-change Notification
+              detail:
+                state:
+                  - shutting-down
+                  - stopping
+
+  IotLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/iot_lambda/
+      Handler: app.lambda_handler
+      AutoPublishAlias: "iotdeployment"
+      Runtime: python3.7
+      Environment:
+        Variables:
+          BuzzerPin: !Ref BuzzerPin
+          LedPin: !Ref LedPin
+
+Outputs:
+  PublishToIotCloudFunction:
+    Description: "PublishToIotCloud Lambda Function ARN"
+    Value: !GetAtt PublishToIotCloud.Arn
+  IotLambdaFunction:
+    Description: "IotLambda Function ARN"
+    Value: !GetAtt IotLambda.Arn
