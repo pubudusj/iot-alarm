@@ -1,6 +1,6 @@
 # IoT-Alarm
 
-This project contains source code and supporting files for the serverless IoT application described at : [https://dev.to/pubudusj/how-i-created-a-physical-alarm-to-warn-me-when-my-servers-are-down-56if](https://dev.to/pubudusj/how-i-created-a-physical-alarm-to-warn-me-when-my-servers-are-down-56if).
+This project contains source code and supporting files for the serverless IoT application described at : [https://dev.to/pubudusj/how-i-created-a-physical-alarm-to-warn-me-when-my-servers-are-down-gmk](https://dev.to/pubudusj/how-i-created-a-physical-alarm-to-warn-me-when-my-servers-are-down-gmk).
 
 ## Deploy the application
 
